@@ -48,7 +48,7 @@ kl = k ** l
 assert np.all(kl == np.array([1, 4, 27, 64, 625]))
 
 m = np.array([2, 2, 2, 3, 3, 3])
-mc = m.mean() - m.min()
+mc = np.median(m) - m.min()
 
 assert mc == 0.5
 
