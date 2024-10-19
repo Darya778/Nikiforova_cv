@@ -73,7 +73,7 @@ def two_pass(B):
 struct = np.ones((3, 2))
 
 for i in [1, 2, 3, 4, 5, 6]:
-    image = np.load(f"wires{i}npy.txt").astype(int)
+    image = np.load(f"wires{i}.npy").astype(int)
     t_image = two_pass(image)
     izm_image = binary_opening(t_image, struct).astype(int)
     t_izm_image = two_pass(izm_image)
