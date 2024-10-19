@@ -96,7 +96,7 @@ struct6 = [[1,1,1,1],
            [1,1,1,1],
            [1,1,1,1]]
 
-image = (np.load("ps.npy.txt")).astype(int)
+image = (np.load("ps.npy")).astype(int)
 
 count_image1 = two_pass(binary_erosion(image, struct1).astype(int)).max()
 count_image2 = two_pass(binary_erosion(image, struct2).astype(int)).max()
