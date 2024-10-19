@@ -72,7 +72,7 @@ def two_pass(B):
 struct1 = [[1, 0, 0, 0, 1], [0, 1, 0, 1, 0], [0, 0, 1, 0, 0], [0, 1, 0, 1, 0], [1, 0, 0, 0, 1]]
 struct2 = [[0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]]
 
-image = (np.load("stars.npy.txt")).astype(int)
+image = (np.load("stars.npy")).astype(int)
 count_image1 = two_pass(binary_erosion(image, struct1).astype(int))
 count_image2 = two_pass(binary_opening(image, struct2).astype(int))
 print('Крестики: ', count_image1.max())
