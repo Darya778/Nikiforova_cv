@@ -70,46 +70,43 @@ def two_pass(B):
 
 
 struct1 = np.ones((4, 6))
-struct2 = np.ones((6, 4))
 
-struct3 = [[1,1,0,0,1,1],
-           [1,1,0,0,1,1],
-           [1,1,1,1,1,1],
-           [1,1,1,1,1,1]]
+struct3 = [[1, 1, 0, 0, 1, 1],
+           [1, 1, 0, 0, 1, 1],
+           [1, 1, 1, 1, 1, 1],
+           [1, 1, 1, 1, 1, 1]]
 
-struct4 = [[1,1,1,1,1,1],
-           [1,1,1,1,1,1],
-           [1,1,0,0,1,1],
-           [1,1,0,0,1,1]]
+struct4 = [[1, 1, 1, 1, 1, 1],
+           [1, 1, 1, 1, 1, 1],
+           [1, 1, 0, 0, 1, 1],
+           [1, 1, 0, 0, 1, 1]]
 
-struct5 = [[1,1,1,1],
-           [1,1,1,1],
-           [1,1,0,0],
-           [1,1,0,0],
-           [1,1,1,1],
-           [1,1,1,1]]
+struct5 = [[1, 1, 1, 1],
+           [1, 1, 1, 1],
+           [1, 1, 0, 0],
+           [1, 1, 0, 0],
+           [1, 1, 1, 1],
+           [1, 1, 1, 1]]
 
-struct6 = [[1,1,1,1],
-           [1,1,1,1],
-           [0,0,1,1],
-           [0,0,1,1],
-           [1,1,1,1],
-           [1,1,1,1]]
+struct6 = [[1, 1, 1, 1],
+           [1, 1, 1, 1],
+           [0, 0, 1, 1],
+           [0, 0, 1, 1],
+           [1, 1, 1, 1],
+           [1, 1, 1, 1]]
 
-image = (np.load("ps.npy")).astype(int)
+image = (np.load("ps.npy.txt")).astype(int)
 
+counting = label(image)
 count_image1 = two_pass(binary_erosion(image, struct1).astype(int)).max()
-count_image2 = two_pass(binary_erosion(image, struct2).astype(int)).max()
 count_image3 = two_pass(binary_erosion(image, struct3).astype(int)).max()
 count_image4 = two_pass(binary_erosion(image, struct4).astype(int)).max()
 count_image5 = two_pass(binary_erosion(image, struct5).astype(int)).max()
 count_image6 = two_pass(binary_erosion(image, struct6).astype(int)).max()
 
-print('Прямоугольники целые (горизонтальные): ', count_image1)
-print('Прямоугольники целые (вертикальныйные): ', count_image2)
-print('Смотрят вверх (горизонтальные): ', count_image3)
-print('Смотрят вниз (горизонтальные): ', count_image4)
+print('Прямоугольники целые: ', count_image1)
+print('Смотрят вверх (горизонтальные): ', count_image3 - count_image1)
+print('Смотрят вниз (горизонтальные): ', count_image4 - count_image1)
 print('Смотрят вправо (вертикальные): ', count_image5)
 print('Смотрят влево (вертикальныйные): ', count_image6)
-
-print('Всего: ', count_image1+count_image2+count_image3+count_image4+count_image5+count_image6)
+print('Всего: ', counting.max())
