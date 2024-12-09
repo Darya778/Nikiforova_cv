@@ -1,41 +1,44 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.measure import label, regionprops
-from scipy.optimize import linear_sum_assignment
+from scipy.spatial.distance import cdist
 
-def track_objects_optimized(centroids_list):
-    num_objects = len(centroids_list[0])
-    trajectories = [[] for _ in range(num_objects)]
 
-    for i, centroids in enumerate(centroids_list):
-        if i == 0:
-            for j, (centroid, _) in enumerate(centroids):
-                trajectories[j].append(centroid)
+def track_objects_optimized(positions_per_frame):
+    paths = {}
+    for frame_num, positions in enumerate(positions_per_frame):
+        if frame_num == 0:
+            for obj_id, (position, _label) in enumerate(positions):
+                paths[obj_id] = [position]
         else:
-            previous_centroids = np.array([traj[-1] for traj in trajectories])
-            current_centroids = np.array([c[0] for c in centroids])
-            cost_matrix = np.sum((previous_centroids[:, np.newaxis, :] - current_centroids[np.newaxis, :, :])*2, axis=2)
-            row_ind, col_ind = linear_sum_assignment(cost_matrix)
-            for j, k in zip(row_ind, col_ind):
-                trajectories[j].append(current_centroids[k])
+            previous_positions = []
+            for path in paths.values():
+                previous_positions.append(path[-1])
+            previous_positions = np.array(previous_positions)
+            current_positions = []
+            for p in positions:
+                current_positions.append(p[0])
+            current_positions_array = np.array(current_positions)
+            distance_matrix = cdist(previous_positions, current_positions_array)
+            for obj_id, path in paths.items():
+                min_dist_idx = np.argmin(distance_matrix[obj_id])
+                path.append(current_positions_array[min_dist_idx])
+    return paths
 
-    return trajectories
 
-
-centroids_list = []
+positions_per_frame = []
 for i in range(100):
-    data = np.load(f'out/h_{i}.npy')
-    labeled = label(data)
-    regions = regionprops(labeled)
-    current_centroid = []
+    motion_data = np.load(f'motion/out/h_{i}.npy')
+    labeled_image = label(motion_data)
+    regions = regionprops(labeled_image)
+    frame_positions = []
     for region in regions:
-        current_centroid.append([region.centroid, region.label])
-    centroids_list.append(current_centroid)
+        frame_positions.append([region.centroid, region.label])
+    positions_per_frame.append(frame_positions)
 
 
-trajectories = track_objects_optimized(centroids_list)
-for trajectory in trajectories:
-    trajectory = np.array(trajectory)
-    plt.plot(trajectory[:, 1], trajectory[:, 0], marker='o')
+object_paths = track_objects_optimized(positions_per_frame)
+for obj_id, path in object_paths.items():
+    path = np.array(path)
+    plt.plot(path[:, 1], path[:, 0], marker='o')
 plt.show()
-
