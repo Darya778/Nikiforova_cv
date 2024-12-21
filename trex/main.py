@@ -29,13 +29,13 @@ def calculate_timer(start_tick, elapsed):
 
 
 def calculate_safe_zone(elapsed_time):
-    START_SPEED = 8
+    START_SPEED = 9
     ACCELERATION = 0.0032
     MAX_SPEED = 14
 
     current_speed = min(START_SPEED + ACCELERATION * elapsed_time, MAX_SPEED)
     base_safe_zone = 45 + current_speed * 10
-    early_jump_buffer = -65 + current_speed * 20
+    early_jump_buffer = -255 + current_speed * 19 + 2 * current_speed ** 2
 
     return int(base_safe_zone + early_jump_buffer)
 
@@ -54,7 +54,7 @@ def evaluate_and_act(objects, elapsed_time):
             elif 8 < h <= 45:
                 if y < 120:
                     pyautogui.keyDown("down")
-                    time.sleep(0.3)
+                    time.sleep(0.33)
                     pyautogui.keyUp("down")
                 else:
                     pyautogui.press("space")
