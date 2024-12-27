@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 capture = cv2.VideoCapture('output.avi')
 c = 0
@@ -24,7 +23,7 @@ while frame is not None:
 
     if circles_or_ovals == 4 and triangles == 1:
         c += 1
-        print(f"{c}) Найдено изображение)")
+        print(f"{c}) изображение найдено")
     ret, frame = capture.read()
 
 print("Число моих изображений = ", c)
