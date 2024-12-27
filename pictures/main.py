@@ -26,5 +26,5 @@ while frame is not None:
         print(f"{c}) изображение найдено")
     ret, frame = capture.read()
 
-print("Число моих изображений = ", c)
+print("\nЧисло моих изображений = ", c)
 
